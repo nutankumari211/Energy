@@ -19,16 +19,12 @@ COPY . .
 RUN npm run build
 
 # Verify build output exists
-RUN ls -la dist/ || (echo "Build failed - dist folder not found" && exit 1)
+RUN echo "=== Checking build output ===" && \
+    ls -la dist/ && \
+    test -f dist/src/main.js && echo "✓ dist/src/main.js exists" || (echo "✗ dist/src/main.js NOT FOUND" && exit 1)
 
 # Expose port
 EXPOSE 3000
 
-# Create startup script
-RUN echo '#!/bin/sh' > /app/start.sh && \
-    echo 'npx prisma migrate deploy || true' >> /app/start.sh && \
-    echo 'npm run start:prod' >> /app/start.sh && \
-    chmod +x /app/start.sh
-
 # Start the application
-CMD ["/app/start.sh"]
+CMD sh -c "npx prisma migrate deploy || true && npm run start:prod"
