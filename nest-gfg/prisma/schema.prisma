@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model MeterVehicleCorrelation {
+  id        BigInt   @id @default(autoincrement())
+  meterId   String
+  vehicleId String
+  createdAt DateTime @default(now())
+
+  @@unique([meterId, vehicleId])
+  @@index([meterId])
+  @@index([vehicleId])
+  @@map("meter_vehicle_correlation")
+}
+
+model MeterCurrentStatus {
+  meterId       String   @id
+  lastKwhAc     Float
+  lastVoltage   Float
+  lastSeen      DateTime @updatedAt
+  updatedAt     DateTime @updatedAt
+
+  @@map("meter_current_status")
+}
+
+model VehicleCurrentStatus {
+  vehicleId  String   @id
+  currentSoc Int
+  lastKwhDc  Float
+  lastTemp   Float
+  lastSeen   DateTime @updatedAt
+  updatedAt  DateTime @updatedAt
+
+  @@map("vehicle_current_status")
+}
+
+model MeterReadingHistory {
+  id            BigInt   @id @default(autoincrement())
+  meterId       String
+  kwhConsumedAc Float
+  voltage       Float
+  timestamp     DateTime @default(now())
+
+  @@index([meterId, timestamp])
+  @@index([timestamp])
+  @@map("meter_readings_history")
+}
+
+model VehicleReadingHistory {
+  id             BigInt   @id @default(autoincrement())
+  vehicleId      String
+  soc            Int
+  kwhDeliveredDc Float
+  batteryTemp    Float
+  timestamp      DateTime @default(now())
+
+  @@index([vehicleId, timestamp])
+  @@index([timestamp])
+  @@map("vehicle_readings_history")
+}
