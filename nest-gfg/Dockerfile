@@ -18,6 +18,9 @@ COPY . .
 # Build the application
 RUN npm run build
 
+# Verify build output exists
+RUN ls -la dist/ || (echo "Build failed - dist folder not found" && exit 1)
+
 # Expose port
 EXPOSE 3000
 
