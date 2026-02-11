@@ -21,7 +21,7 @@ RUN npm run build
 # Verify build output exists
 RUN echo "=== Checking build output ===" && \
     ls -la dist/ && \
-    test -f dist/src/main.js && echo "✓ dist/src/main.js exists" || (echo "✗ dist/src/main.js NOT FOUND" && exit 1)
+    test -f dist/main.js && echo "✓ dist/main.js exists" || (echo "✗ dist/main.js NOT FOUND" && exit 1)
 
 # Expose port
 EXPOSE 3000
